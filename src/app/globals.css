@@ -3,11 +3,17 @@
   --darkGreen: #29843f;
   --lightGreen: #a2ca39;
   --NeonGreen: #3ab748;
+  --NeonGreenTransparent: rgba(58, 183, 72, 0.6);
+  --CrimsonRed: rgba(220, 20, 60, 1);
+  --CrimsonRedTransparent: rgba(220, 20, 60, 0.6);
+  --GrayTransparent: rgba(128, 128, 128, 0.6);
+  --GrayColor: rgba(128, 128, 128, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #271d3f;
+    --backgroundTransparent: rgba(39, 29, 63, 0.5);
     --darkGreen: #29843f;
     --lightGreen: #a2ca39;
   }
@@ -16,7 +22,6 @@
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden;
   height: 100vh;
 }
 

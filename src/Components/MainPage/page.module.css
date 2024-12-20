@@ -1,6 +1,6 @@
 .container {
   width: 100%;
-  padding: 100px;
+  padding: 100px 50px;
 }
 
 .filterSortContainer{
@@ -39,4 +39,6 @@
   flex-wrap: wrap;
   gap: 15px;
   align-items: flex-start;
+  justify-content: center;
+  padding-top: 50px;
 }

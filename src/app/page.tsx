@@ -1,18 +1,15 @@
-import Card from "@/Components/Card/Card";
-import styles from "./page.module.css";
+"use client"
+import { ApolloProvider } from "@apollo/client";
+import client from "@/Utils/Graphql/apollo-client";
+import Mainpage from "@/Components/MainPage/Mainpage";
 
 export default function Home() {
+
   return (
-    <div className={styles.container}>
-      <div className={styles.filterSortContainer}>
-        <p>Filter</p>
-          <p className={styles.FilterSortBTN}>
-            Filter & Sort
-          </p>
+    <ApolloProvider client={client}>
+      <div>
+        <Mainpage />
       </div>
-      <div className={styles.cardsContainer}>
-        <Card />
-      </div>
-    </div>
+    </ApolloProvider>
   );
 }

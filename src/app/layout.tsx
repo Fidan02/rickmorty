@@ -32,8 +32,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable}`}>
-        <Navbar />
-        {children}
+          <Navbar />
+          {children}
+
+
+          <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
       </body>
     </html>
   );
