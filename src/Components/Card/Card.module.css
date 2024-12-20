@@ -1,0 +1,66 @@
+.CardContainer{
+    display: flex;
+    align-items: end;
+    font-family: var(--font-poppins);
+    gap: 5px;
+}
+
+.Container{
+    background: white;
+    width: 300px;
+    border-radius: 10px;
+    padding: 0px 0px 5px 0px;
+}
+
+.imageContainer{
+    height: 300px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.imageContainer > img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.CardContainer > p{
+    writing-mode: vertical-lr;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: 500;
+    color: var(--NeonGreen);
+    border: 2px solid var(--NeonGreen);
+    padding: 4px;
+    line-height: 19px; 
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.information{
+    color: black;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.information > p{
+    gap: 5px;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: var(--font-geist-mono);
+}
+
+.information > p > span{
+    font-weight: 600;
+    font-family: var(--font-poppins);
+}
+
+.GenderOrigin{
+    display: flex;
+    flex-direction: column;
+}
