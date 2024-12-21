@@ -1,10 +1,10 @@
-"use client";
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import Card from "@/Components/Card/Card";
 import styles from './page.module.css';
 import Loading from '@/Components/Loading/Loading';
 import { useQuery } from "@apollo/client";
 import { GetAllCharacters } from "@/Utils/Queries/AllCharacters";
+import Sidebar from '../Sidebar/Sidebar';
 
 interface Character {
   id: string;
@@ -19,18 +19,29 @@ interface Character {
 }
 
 const Mainpage = () => {
-  const [allCharacters, setAllCharacters] = useState<Character[]>([])
-  const [isFetching, setIsFetching] = useState(false)
+  const [allCharacters, setAllCharacters] = useState<Character[]>([]);
+  const [filteredCharacters, setFilteredCharacters] = useState<Character[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [sidebar, setSidebar] = useState(false);
+  const [filters, setFilters] = useState({
+    status: [] as string[],
+    species: [] as string[],
+  });
 
-  const pageRef = useRef(1)
-  const allCharactersRef = useRef<Character[]>([])
+  const pageRef = useRef(1);
+  const allCharactersRef = useRef<Character[]>([]);
+
+  const toggleSidebar = () => {
+    setSidebar((prev) => !prev);
+  };
 
   const { loading, error, fetchMore } = useQuery(GetAllCharacters, {
-    variables: { page: 1 },
+    variables: { page: 1, status: filters.status.join(','), species: filters.species.join(',') },
     onCompleted: (data) => {
-      if (data.characters.results) {
-        setAllCharacters(data.characters.results)
-        allCharactersRef.current = data.characters.results
+      if (data?.characters?.results) {
+        setAllCharacters(data.characters.results);
+        setFilteredCharacters(data.characters.results);
+        allCharactersRef.current = data.characters.results;
       }
     },
   });
@@ -42,7 +53,7 @@ const Mainpage = () => {
     const nextPage = pageRef.current + 1;
 
     fetchMore({
-      variables: { page: nextPage },
+      variables: { page: nextPage, status: filters.status.join(','), species: filters.species.join(',') },
     }).then(({ data: fetchMoreResult }) => {
         if (fetchMoreResult?.characters?.results) {
           const uniqueCharacters = fetchMoreResult.characters.results.filter(
@@ -66,7 +77,7 @@ const Mainpage = () => {
         console.error("FetchMore error:", err);
         setIsFetching(false);
       });
-  }, [fetchMore, isFetching]);
+  }, [fetchMore, isFetching, filters]);
 
   const checkBottom = useCallback(() => {
     if (isFetching || loading) return;
@@ -96,6 +107,24 @@ const Mainpage = () => {
     };
   }, [checkBottom]);
 
+  useEffect(() => {
+    const applyFilters = () => {
+      let filtered = allCharacters;
+
+      if (filters.status.length > 0) {
+        filtered = filtered.filter((char) => filters.status.includes(char.status));
+      }
+
+      if (filters.species.length > 0) {
+        filtered = filtered.filter((char) => filters.species.includes(char.species));
+      }
+
+      setFilteredCharacters(filtered);
+    };
+
+    applyFilters();
+  }, [filters, allCharacters]);
+
   if (loading && allCharacters.length === 0) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -103,14 +132,20 @@ const Mainpage = () => {
     <div className={styles.container}>
       <div className={styles.filterSortContainer}>
         <p>Filter</p>
-        <p className={styles.FilterSortBTN}>Filter & Sort</p>
+        <p className={styles.FilterSortBTN} onClick={toggleSidebar}>Filter & Sort</p>
       </div>
+      <Sidebar
+        display={sidebar}
+        toggleSideBar={toggleSidebar}
+        filters={filters}
+        setFilters={setFilters}
+      />
       <div className={styles.cardsContainer}>
-        {allCharacters.map((character: Character) => (
+        {filteredCharacters.map((character: Character) => (
           <Card key={character.id} properties={character} />
         ))}
       </div>
-      {<p className={styles.loadingMoreAfter}>Loading more...</p>}
+      {isFetching && <p className={styles.loadingMoreAfter}>Loading more...</p>}
     </div>
   );
 };

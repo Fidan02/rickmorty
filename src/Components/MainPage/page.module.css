@@ -1,6 +1,7 @@
 .container {
   width: 100%;
   padding: 100px 50px;
+  position: relative;
 }
 
 .filterSortContainer{
@@ -10,6 +11,7 @@
   font-family: var(--font-geist-mono);
   border-bottom: 2px solid white;
   padding-bottom: 5px;
+  position: relative;
 }
 
 .filterSortContainer > p:first-child{
@@ -32,6 +34,7 @@
   transition: ease-in 0.35s;
   background: var(--lightGreen);
 }
+
 
 .cardsContainer{
   width: 100%;
