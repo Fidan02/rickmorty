@@ -97,7 +97,7 @@ const Mainpage = () => {
     const scrollPos = window.scrollY + window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
 
-    if (scrollPos - 100 >= docHeight) {
+    if (scrollPos + 1 >= docHeight) {
       nextBatch();
     }
   }, [isFetching, loading, nextBatch]);
