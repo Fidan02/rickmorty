@@ -42,3 +42,17 @@
   justify-content: center;
   padding-top: 50px;
 }
+
+.loadingMoreAfter{
+  text-align: center;
+  font-size: 22px;
+  font-family: var(--font-geist-mono);
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 800px){
+  .container {
+    padding: 100px 20px;
+  }  
+}
