@@ -1,0 +1,12 @@
+.container{
+    height: 200px;
+    background: linear-gradient(
+        90deg, var(--lightGreen), var(--darkGreen), var(--lightGreen));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    margin-top: 30px;
+}

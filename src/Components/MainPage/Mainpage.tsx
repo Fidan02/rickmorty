@@ -5,6 +5,9 @@ import Loading from '@/Components/Loading/Loading';
 import { useQuery } from "@apollo/client";
 import { GetAllCharacters } from "@/Utils/Queries/AllCharacters";
 import Sidebar from '../Sidebar/Sidebar';
+import Footer from '../Footer/Footer';
+import ENG from '@/Utils/Languages/ENG';
+import MKD from '@/Utils/Languages/MKD'
 
 interface Character {
   id: string;
@@ -20,6 +23,7 @@ interface Character {
 
 const Mainpage = () => {
   const [sortOption, setSortOption] = useState<string>('default');
+  const [language, setLanguage] = useState('ENG')
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [filteredCharacters, setFilteredCharacters] = useState<Character[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -35,6 +39,13 @@ const Mainpage = () => {
   const toggleSidebar = () => {
     setSidebar((prev) => !prev);
   };
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setLanguage(event.target.value);
+  };
+
+  const languageTexts = language === 'ENG' ? ENG : MKD;
+
 
   const { loading, error, fetchMore } = useQuery(GetAllCharacters, {
     variables: { page: 1, status: filters.status.join(','), species: filters.species.join(',') },
@@ -86,7 +97,7 @@ const Mainpage = () => {
     const scrollPos = window.scrollY + window.innerHeight;
     const docHeight = document.documentElement.scrollHeight;
 
-    if (scrollPos + 100 >= docHeight) {
+    if (scrollPos - 100 >= docHeight) {
       nextBatch();
     }
   }, [isFetching, loading, nextBatch]);
@@ -141,8 +152,8 @@ const Mainpage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.filterSortContainer}>
-        <p>Filter</p>
-        <p className={styles.FilterSortBTN} onClick={toggleSidebar}>Filter & Sort</p>
+        <p>{languageTexts.filter}</p>
+        <p className={styles.FilterSortBTN} onClick={toggleSidebar}>{languageTexts.filterSort}</p>
       </div>
       <Sidebar
         display={sidebar}
@@ -151,6 +162,7 @@ const Mainpage = () => {
         setFilters={setFilters}
         sortOption={sortOption}
         setSortOption={setSortOption}
+        language={language}
       />
       <div className={styles.cardsContainer}>
         {filteredCharacters.map((character: Character) => (
@@ -158,6 +170,7 @@ const Mainpage = () => {
         ))}
       </div>
       {isFetching && <p className={styles.loadingMoreAfter}>Loading more...</p>}
+      <Footer language={language} setLanguage={handleLanguageChange}/>
     </div>
   );
 };

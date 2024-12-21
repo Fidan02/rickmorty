@@ -74,3 +74,15 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+
+  /* For mobile */
+  @media screen and (max-width: 800px){
+    .filterContainerSideBar{
+      width: 100%;
+    }
+    .speciesStatus{
+      flex-direction: column;
+      gap: 40px;
+    }
+  }

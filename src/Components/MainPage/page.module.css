@@ -58,4 +58,8 @@
   .container {
     padding: 100px 20px;
   }  
+
+  .FilterSortBTN{
+    font-size: 14px;
+  }
 }

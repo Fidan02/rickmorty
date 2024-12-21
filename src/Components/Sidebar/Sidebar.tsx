@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './Sidebar.module.css';
 import { useQuery } from '@apollo/client';
 import { GetAllSpecies } from '@/Utils/Queries/AllSpecies';
+import ENG from '@/Utils/Languages/ENG';
+import MKD from '@/Utils/Languages/MKD';
 
 type SidebarProps = {
   display: boolean;
@@ -10,9 +12,18 @@ type SidebarProps = {
   setFilters: React.Dispatch<React.SetStateAction<{ status: string[]; species: string[] }>>;
   sortOption: string;
   setSortOption: React.Dispatch<React.SetStateAction<string>>;
+  language: string;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setFilters, sortOption, setSortOption }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  display,
+  toggleSideBar,
+  filters,
+  setFilters,
+  sortOption,
+  setSortOption,
+  language,
+}) => {
   const [speciesList, setSpeciesList] = useState<string[]>([]);
 
   const { loading, error, data, fetchMore } = useQuery(GetAllSpecies, {
@@ -37,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
           setSpeciesList((prev) => Array.from(new Set([...prev, ...newSpecies])));
           nextPage = nextData.characters.info.next;
         } else {
-          nextPage = null; // Stop if no next page
+          nextPage = null;
         }
       }
     };
@@ -65,14 +76,16 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
   if (loading) return <p>Loading species...</p>;
   if (error) return <p>Error loading species</p>;
 
+  const languageTexts = language === 'ENG' ? ENG : MKD;
+
   return (
     <div className={`${display ? styles.filterContainerSideBar : styles.displayNone}`}>
       <div className={styles.filterSideBar}>
-        <p>Filter: </p>
+        <p>{languageTexts.filter}:</p>
         <div className={styles.speciesStatus}>
           <div className={styles.statusFilter}>
-            <p>Status: </p>
-            {['Alive', 'Dead', 'unknown'].map((status) => (
+            <p>{languageTexts.status}:</p>
+            {[languageTexts.alive, languageTexts.dead, languageTexts.unknown].map((status) => (
               <div key={status}>
                 <label>{status}</label>
                 <input
@@ -86,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
             ))}
           </div>
           <div className={styles.SpeciesFilter}>
-            <p>Species: </p>
+            <p>{languageTexts.species}:</p>
             {speciesList.map((species, index) => (
               <div key={index}>
                 <label>{species}</label>
@@ -103,39 +116,39 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
         </div>
         <div className={styles.speciesStatus}>
           <div className={styles.statusFilter}>
-            <p>Sort By: </p>
+            <p>{languageTexts.sortBy}:</p>
             <div>
-              <label>Default</label>
+              <label>{languageTexts.default}</label>
               <input
-                  type="radio"
-                  value="default"
-                  checked={sortOption === 'default'}
-                  onChange={handleSortChange}
-                />
+                type="radio"
+                value="default"
+                checked={sortOption === 'default'}
+                onChange={handleSortChange}
+              />
             </div>
             <div>
-              <label>Name</label>
+              <label>{languageTexts.name}</label>
               <input
-                  type="radio"
-                  value="name"
-                  checked={sortOption === 'name'}
-                  onChange={handleSortChange}
-                />
+                type="radio"
+                value="name"
+                checked={sortOption === 'name'}
+                onChange={handleSortChange}
+              />
             </div>
             <div>
-              <label>Origin</label>
+              <label>{languageTexts.origin}</label>
               <input
-                  type="radio"
-                  value="origin"
-                  checked={sortOption === 'origin'}
-                  onChange={handleSortChange}
-                />
+                type="radio"
+                value="origin"
+                checked={sortOption === 'origin'}
+                onChange={handleSortChange}
+              />
             </div>
           </div>
         </div>
       </div>
       <p className={styles.doneBTN} onClick={toggleSideBar}>
-        DONE
+        {languageTexts.done}
       </p>
     </div>
   );
