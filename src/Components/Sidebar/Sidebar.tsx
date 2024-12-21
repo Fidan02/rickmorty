@@ -8,9 +8,11 @@ type SidebarProps = {
   toggleSideBar: () => void;
   filters: { status: string[]; species: string[] };
   setFilters: React.Dispatch<React.SetStateAction<{ status: string[]; species: string[] }>>;
+  sortOption: string;
+  setSortOption: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setFilters }) => {
+const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setFilters, sortOption, setSortOption }) => {
   const [speciesList, setSpeciesList] = useState<string[]>([]);
 
   const { loading, error, data, fetchMore } = useQuery(GetAllSpecies, {
@@ -56,6 +58,10 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
     });
   };
 
+  const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSortOption(event.target.value);
+  };
+
   if (loading) return <p>Loading species...</p>;
   if (error) return <p>Error loading species</p>;
 
@@ -93,6 +99,38 @@ const Sidebar: React.FC<SidebarProps> = ({ display, toggleSideBar, filters, setF
                 />
               </div>
             ))}
+          </div>
+        </div>
+        <div className={styles.speciesStatus}>
+          <div className={styles.statusFilter}>
+            <p>Sort By: </p>
+            <div>
+              <label>Default</label>
+              <input
+                  type="radio"
+                  value="default"
+                  checked={sortOption === 'default'}
+                  onChange={handleSortChange}
+                />
+            </div>
+            <div>
+              <label>Name</label>
+              <input
+                  type="radio"
+                  value="name"
+                  checked={sortOption === 'name'}
+                  onChange={handleSortChange}
+                />
+            </div>
+            <div>
+              <label>Origin</label>
+              <input
+                  type="radio"
+                  value="origin"
+                  checked={sortOption === 'origin'}
+                  onChange={handleSortChange}
+                />
+            </div>
           </div>
         </div>
       </div>

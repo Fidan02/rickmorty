@@ -19,6 +19,7 @@ interface Character {
 }
 
 const Mainpage = () => {
+  const [sortOption, setSortOption] = useState<string>('default');
   const [allCharacters, setAllCharacters] = useState<Character[]>([]);
   const [filteredCharacters, setFilteredCharacters] = useState<Character[]>([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -108,22 +109,31 @@ const Mainpage = () => {
   }, [checkBottom]);
 
   useEffect(() => {
-    const applyFilters = () => {
-      let filtered = allCharacters;
-
+    const applyFiltersAndSort = () => {
+      let filtered = [...allCharacters];
+  
       if (filters.status.length > 0) {
         filtered = filtered.filter((char) => filters.status.includes(char.status));
       }
-
+  
       if (filters.species.length > 0) {
         filtered = filtered.filter((char) => filters.species.includes(char.species));
       }
-
+  
+      if (sortOption === 'default') {
+        filtered = [...allCharacters];
+      } else if (sortOption === 'name') {
+        filtered = filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sortOption === 'origin') {
+        filtered = filtered.sort((a, b) => a.origin.name.localeCompare(b.origin.name));
+      }
+  
       setFilteredCharacters(filtered);
     };
-
-    applyFilters();
-  }, [filters, allCharacters]);
+  
+    applyFiltersAndSort();
+  }, [filters, allCharacters, sortOption]);
+  
 
   if (loading && allCharacters.length === 0) return <Loading />;
   if (error) return <p>Error: {error.message}</p>;
@@ -139,6 +149,8 @@ const Mainpage = () => {
         toggleSideBar={toggleSidebar}
         filters={filters}
         setFilters={setFilters}
+        sortOption={sortOption}
+        setSortOption={setSortOption}
       />
       <div className={styles.cardsContainer}>
         {filteredCharacters.map((character: Character) => (
